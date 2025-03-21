@@ -148,3 +148,42 @@ class UserService:
     def __init__(self, db: Database):
         self.db = db
 ### Виправлення: Використання абстракції `Database` дозволяє легко змінювати реалізацію бази даних.
+
+
+
+###Порушення
+class Worker:
+    def work(self):
+        pass
+    def eat(self):
+        pass
+class Manager(Worker):
+    def work(self):
+        print("Менеджер працює")
+    def eat(self):
+        print("Менеджер їсть")
+class Robot(Worker):
+    def work(self):
+        print("Робот працює")
+    def eat(self):  # Порушення ISP, робот не їсть
+        raise NotImplementedError("Робот не їсть")
+
+
+### Вирішення
+from abc import ABC, abstractmethod
+class Workable(ABC):
+    @abstractmethod
+    def work(self):
+        pass
+class Eatable(ABC):
+    @abstractmethod
+    def eat(self):
+        pass
+class Manager(Workable, Eatable):
+    def work(self):
+        print("Менеджер працює")
+    def eat(self):
+        print("Менеджер їсть")
+class Robot(Workable):
+    def work(self):
+        print("Робот працює")
